@@ -1,7 +1,7 @@
 ﻿# Database_Testing
 
-git status
-git add .
-git status
-git commit -m "updated message"
-git push
+git status<br>
+git add .<br>
+git status<br>
+git commit -m "updated message"<br>
+git push<br>
