@@ -250,4 +250,67 @@ DELIMITER ;
 CALL test_error();
 ------------------------------------------------------------------------------
 Session 5 <-
+1. check stored procedure exist in database
+2. check stored procedure with valid input data
+3. check stored procedure handle exceptions where we pass invalid input data
+4. check stored procedure display results as expected
+5. check stored procedure inserting data in proper table/s
+6. check stored procedure updating data in proper table/s
+7. check stored procedure deleting data from proper table/s
+8. check calling stored procedure from another stored procedure
+---
+Stored functions Testing:
+CREATE FUNCTION customerLevel(Credit DECIMAL(10,2)) 
+RETURNS VARCHAR(20)
+DETERMINISTIC
+BEGIN
+    DECLARE customerLevel VARCHAR(20);
+    
+    IF Credit > 50000 THEN
+        SET customerLevel = 'Platinum';
+    ELSEIF Credit >= 10000 AND Credit <= 50000 THEN
+        SET customerLevel = 'Gold';
+    ELSEIF Credit < 10000 THEN
+        SET customerLevel = 'Silver';
+    END IF;
+    
+    RETURN customerLevel;
+END;
+---
+SHOW FUNCTION STATUS WHERE db='classicmodels';
+Db             Name           Type      Definer         Modified             Created              Security_type   Comment   character_set_client   collation_connection     Database Collation
+------------- -------------- --------- --------------- -------------------- -------------------- --------------- --------- ---------------------- ------------------------ ---------------------
+classicmodels  customerLevel  FUNCTION  root@localhost  2025-04-14 15:10:57  2025-04-14 15:10:57   DEFINER         (blank)   utf8mb4                 utf8mb4_unicode_ci        utf8_general_ci
+---
+Calling stored functions in sql
+select customerName from customers;
+
+select CustomerLevel(creditLimit) from customers;
+select CustomerName,CustomerLevel(creditLimit) from customers;
+---
+Calling stored function with stored procedure
+DELIMITER //
+
+CREATE PROCEDURE GetCustomerLevel(
+	IN customerNo INT,
+	OUT customerLevel VARCHAR(20)
+)
+BEGIN
+	DECLARE credit DEC(10,2) DEFAULT 0;
+	
+	-- Get credit limit of a customer
+	SELECT creditLimit INTO credit 
+	FROM customers 
+	WHERE customerNumber = customerNo;
+	
+	-- Call the stored function
+	SET customerLevel = CustomerLevel(credit);
+END//
+
+DELIMITER ;
+---
+call GetCustomerLevel(131,@customerLevel);
+select @customerLevel;
+------------------------------------------------------------------------------
+Session 9 <-
 
