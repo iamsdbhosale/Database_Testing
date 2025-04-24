@@ -1,0 +1,636 @@
+mongoDB: {https://www.youtube.com/playlist?list=PL0b6OzIxLPbysebQ-yBd7ZHYGPMuFvvyD}
+MongoDB is a NoSQL (non-relational) database.
+It store data in a type of json format called BSON (Binary JSON).
+---
+json datatypes
+*String
+*Number
+*Boolean
+*Array
+*Object
+*Null
+---
+BSON Datatypes :
+String
+Double
+32-bit Integer
+64-bit Integer
+Boolean
+Array
+Object
+Null
+Regular Expression
+Timestamp
+Date
+ObjectId
+---
+
+Json - text-based (human-readable)
+Bson - Binary (not human-readable)
+---
+Json - Larger size due to text
+Bson - More compact
+---
+Speed
+Json - Slower to parse and write
+Bson - faster to parse and write
+---
+Usage
+json - web APIs and data exchange
+Bson - MongoDB and database storage with a rich set of data types.
+---
+Benefits :
+Flexible schema design.
+horizontal scalability through sharding.
+High performance for read and write operations.
+powerful query language
+built-in replication for high availability.
+Geospatial data support.
+json-like BSON data format.
+real-time analytics capability.
+Easy integration with big data tools.
+open-source and community-driven.
+---
+Create collection & documents in database.
+Add data in collection
+update data in collection
+read data from collection
+delete data from collction.
+---
+Install :
+1. MongoDB Community Server
+2. MongoDB Tools Free - MongoDB Shell
+---
+Create system variable :
+C:\Program Files\MongoDB\Server\8.0\bin
+'Edit system environment'
+'Environment Variables...'
+'System variables'
+path variable
+'new' - paste the path.
+---
+C:\mongosh
+
+upside - User variables
+path variable
+new paste path
+---
+cmd
+mongosh
+
+Current Mongosh Log ID: 6809d9121c61db3b65b5f898
+Connecting to:          mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.5.0
+Using MongoDB:          8.0.8
+Using Mongosh:          2.5.0
+
+For mongosh info see: https://www.mongodb.com/docs/mongodb-shell/
+
+
+To help improve our products, anonymous usage data is collected and sent to MongoDB periodically (https://www.mongodb.com/legal/privacy-policy).
+You can opt-out by running the disableTelemetry() command.
+
+------
+   The server generated these startup warnings when booting
+   2025-04-24T11:39:53.576+05:30: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+------
+test> show dbs
+admin   40.00 KiB
+config  60.00 KiB
+local   72.00 KiB
+---
+Create database & Collection
+Database in MongoDB - group of collections
+Single record is called as 'Document'
+---
+use database_name
+Example : use school
+
+use -> create new database and use existing database.
+---
+db.createCollection("Collection_name")
+---
+'CTRL+l' to clear in mongosh cmd prompt
+---
+test>  show dbs
+admin    40.00 KiB
+config  108.00 KiB
+local    72.00 KiB
+test> use school
+switched to db school
+school> db
+school
+---
+db.createCollection("students")
+---
+school> db.createCollection("students")
+{ ok: 1 }
+---
+school> show collections
+students
+---
+school> db.createCollection("library")
+{ ok: 1 }
+---
+school> show collections
+library
+students
+---
+school> show dbs
+admin    40.00 KiB
+config  108.00 KiB
+local    72.00 KiB
+school   16.00 KiB
+---
+rename collection:
+db.students.renameCollection("student")
+---
+school> db.students.renameCollection("student")
+{ ok: 1 }
+---
+school> show collections
+library
+student
+---
+Help :
+db.help()
+---
+db.student.help()
+---
+delete collection:
+db.library.drop()
+---
+school> db.library.drop()
+true
+school> show collections
+student
+---
+To delete database
+db.dropDatabase()
+---
+Insert Documents:
+insertOne()
+insertMany()
+---
+db.collection_name.insertOne({field1:"Value",field2:"Value"})
+
+db.collection_name.insertMany([
+	{field1:"Value",field2:value},
+	{field1:"Value",field2:value}
+])
+---
+school> db.students.insertOne({name:"Akshay Kumar",age:25,class:"BCA"})
+{
+  acknowledged: true,
+  insertedId: ObjectId('6809df661c61db3b65b5f899')
+}
+---
+To check data:
+db.students.find()
+---
+school> db.students.find()
+[
+  {
+    _id: ObjectId('6809df661c61db3b65b5f899'),
+    name: 'Akshay Kumar',
+    age: 25,
+    class: 'BCA'
+  }
+]
+---
+db.students.insertMany([
+	{name:"Salman Khan",age:22,class:"BTech"},
+	{name:"Sachin Khedekar",age:22,class:"BArt"},
+	{name:"John Abhraham",age:25,class:"BCom"},
+])
+---
+school> db.students.insertMany([
+...     {name:"Salman Khan",age:22,class:"BTech"},
+...     {name:"Sachin Khedekar",age:22,class:"BArt"},
+...     {name:"John Abhraham",age:25,class:"BCom"},
+... ])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('6809e10a1c61db3b65b5f89b'),
+    '1': ObjectId('6809e10a1c61db3b65b5f89c'),
+    '2': ObjectId('6809e10a1c61db3b65b5f89d')
+  }
+}
+---
+MongoDB Data Types
+BSON Datatypes :
+String
+Double
+32-bit Integer
+64-bit Integer
+Boolean
+Array
+Object
+Null
+Regular Expression
+Timestamp
+Date
+ObjectId
+---
+{dob:ISODate("2025-04-24T12:30:00Z")}
+T-Time
+Z-UTC (Coordinated Universal Time)
+---
+{dob:ISODate("2025-04-24T12:30:00+02:00")}
++02:00 - (Central European Time)
+---
+{dob:ISODate("2025-04-24T12:30:00-05:00")}
+-05:00 - (Eastern Standard Time)
+---
+{dob:ISODate("2025-04-24T12:30:00")}
+without Z - (Local Time Zone)
+---
+{dob:new Date("2025-04-24T12:30:00Z")}
+
+{dob:new Date()}
+Current date and time
+---
+32-bit Integer Range {-2,147,483,648 to 2,147,483,647}
+64-bit Integer Range {-9,223,372,036,854,775,808 to 9,223,372,036,854,775,807}
+---
+db.createCollection("personal")
+---
+db.personal.insertOne({
+	name:"X Y",
+	age:25,
+	married:false,
+	dob:ISODate("2000-10-15T08:00:00Z"),
+	weight:65.50,
+	kids:null,
+	hobbies:["music","sports"],
+	address:{
+	"street":"Pandharpur-Karad Road",
+	"city":"Pandharpur",
+	"pin":413304
+}
+	
+})
+---
+db.personal.insertOne({
+	name:"Tanmay Bhosale",
+	age:6,
+	married:false,
+	dob:ISODate("2010-10-10T12:30:00Z"),
+	weight:65.50,
+	kids:null,
+	hobbies:["music","sports","books"],
+	address:{
+	"street":"Pandharpur-Karad Road",
+	"city":"Pandharpur",
+	"pin":413304
+}
+	
+})
+---
+db.personal.insertOne({
+	name:"Current Date",
+	age:6,
+	married:false,
+	dob:new Date(),
+	weight:65.50,
+	kids:null,
+	hobbies:["music","sports","books"],
+	address:{
+	"street":"Pandharpur-Karad Road",
+	"city":"Pandharpur",
+	"pin":413304
+}
+	
+})
+---
+MongoDB JSON Schema Validation
+1. creating collection with validation rules:
+db.createCollection("student",{
+validator: {
+	$jsonSchema:{
+	title:"Student Object Validation",
+	required:["name","age","course"],
+	properties: {
+		name:{
+			bsonType:"string",
+			description:"Name must be a string and is required"
+			},
+		age:{
+			bsonType:"int",
+			minimum:5,
+			maximum:20,
+			description:"age must be a integer and is required"
+			},
+		course:{
+			bsonType:"string",
+			enum: ["BCA","BTech","BSc"],
+			description:"Courses must be one of the following values :BCA,BTech,BSc"
+			},
+			
+		}
+	}
+}
+});
+---
+db.student.insertOne({
+	name:"Sachin Bhosale",
+	age:19,
+	course:"BTech"
+})
+---
+with mistakes :
+db.student.insertOne({
+	name:34,
+	age:19,
+	course:"BTech"
+})
+---
+Uncaught:
+MongoServerError: Document failed validation
+Additional information: {
+  failingDocumentId: ObjectId('6809f79b1c61db3b65b5f8a2'),
+  details: {
+    operatorName: '$jsonSchema',
+    title: 'student object validation',
+    schemaRulesNotSatisfied: [
+      {
+        operatorName: 'properties',
+        propertiesNotSatisfied: [
+          {
+            propertyName: 'name',
+            description: 'Name must be a string and is required',
+            details: [
+              {
+                operatorName: 'bsonType',
+                specifiedAs: { bsonType: 'string' },
+                reason: 'type did not match',
+                consideredValue: 34,
+                consideredType: 'int'
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
+---
+db.student.insertOne({
+	name:34,
+	age:"19",
+	course:"BTech"
+})
+---
+Uncaught:
+MongoServerError: Document failed validation
+Additional information: {
+  failingDocumentId: ObjectId('6809f7ee1c61db3b65b5f8a3'),
+  details: {
+    operatorName: '$jsonSchema',
+    title: 'student object validation',
+    schemaRulesNotSatisfied: [
+      {
+        operatorName: 'properties',
+        propertiesNotSatisfied: [
+          {
+            propertyName: 'name',
+            description: 'Name must be a string and is required',
+            details: [
+              {
+                operatorName: 'bsonType',
+                specifiedAs: { bsonType: 'string' },
+                reason: 'type did not match',
+                consideredValue: 34,
+                consideredType: 'int'
+              }
+            ]
+          },
+          {
+            propertyName: 'age',
+            description: 'Name must be a string and is required',
+            details: [
+              {
+                operatorName: 'bsonType',
+                specifiedAs: { bsonType: 'int' },
+                reason: 'type did not match',
+                consideredValue: '19',
+                consideredType: 'string'
+              }
+            ]
+          }
+        ]
+      }
+    ]red" }, age: { bsonType: "int", minimum: 5, maximum: 20, description: "Name must be a string and is required" }, course: { bsonType: "string", enum: [ "BCA", "BTec
+  } "BSc" ], description: "Courses must be one of the following values :BCA,BTech,BSc" } } } } }
+}
+---
+db.student.insertOne({
+	name:"Pooja Bhosale",
+	age:19,
+	course:"BCom"
+})
+---
+Uncaught:
+MongoServerError: Document failed validation
+Additional information: {
+  failingDocumentId: ObjectId('6809f84a1c61db3b65b5f8a4'),
+  details: {
+    operatorName: '$jsonSchema',
+    title: 'student object validation',
+    schemaRulesNotSatisfied: [
+      {
+        operatorName: 'properties',
+        propertiesNotSatisfied: [
+          {
+            propertyName: 'course',
+            description: 'Courses must be one of the following values :BCA,BTech,BSc',
+            details: [
+              {
+                operatorName: 'enum',
+                specifiedAs: { enum: [ 'BCA', 'BTech', 'BSc' ] },
+                reason: 'value was not found in enum',
+                consideredValue: 'BCom'
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
+---
+2. Modify an existing collection's schema:
+db.runCommand({
+	collMod:"personal",
+	validator:{
+		$jsonSchema:{
+			required:["name","age","married","dob","weight","kids","address"],
+			properties:{
+				name:{
+					bsonType:"string",
+					description:"Name must be a string and is required."
+					},
+				age:{
+					bsonType:"int",
+					minimum:20,
+					maximum:35,
+					description:"age must be integer and between 20-35 and is required."
+					},
+				married:{
+					bsonType:"bool",
+					description:"married must be boolean (true/false) and is required."
+					},
+				dob:{
+					bsonType:"date",
+					description:"DOB must be a date."
+					},
+				weight:{
+					bsonType:"double",
+					description:"weight must be a double."
+					},
+				kids:{
+					bsonType:"int",
+					description:"kids must be an integer."
+					},
+				hobbies:{
+					bsonType:"array",
+					items:{
+					 bsonType:"string"
+						},
+					description:"Courses must be an array of string"
+					},
+				adress:{
+					bsonType:"object",
+					required:["street","city","pin"],
+					properties:{
+						street:{
+							bsonType:"string",
+							description:"Street must be a string and is required."	
+							},
+						city:{
+							bsonType:"string",
+							description:"city must be a string and is required."	
+							},
+						pin:{
+							bsonType:"int",
+							description:"pin must be a string and is required."	
+							},
+						}
+					},
+				}
+			}
+		}
+});
+---
+db.personal.insertOne({
+	name:"Tanmay Bhosale",
+	age:6,
+	married:false,
+	dob:ISODate("2010-10-10T12:30:00Z"),
+	weight:65.50,
+	kids:null,
+	hobbies:["music","sports","books"],
+	address:{
+	"street":"Pandharpur-Karad Road",
+	"city":"Pandharpur",
+	"pin":413304
+}
+	
+})
+---
+Uncaught:
+MongoServerError: Document failed validation
+Additional information: {
+  failingDocumentId: ObjectId('680a019e1c61db3b65b5f8a5'),
+  details: {
+    operatorName: '$jsonSchema',
+    schemaRulesNotSatisfied: [
+      {
+        operatorName: 'properties',
+        propertiesNotSatisfied: [
+          {
+            propertyName: 'age',
+            description: 'age must be integer and between 20-35 and is required.',
+            details: [
+              {
+                operatorName: 'minimum',
+                specifiedAs: { minimum: 20 },
+                reason: 'comparison failed',
+                consideredValue: 6
+              }
+            ]
+          },
+          {
+            propertyName: 'kids',
+            description: 'kids must be an integer.',
+            details: [
+              {
+                operatorName: 'bsonType',
+                specifiedAs: { bsonType: 'int' },
+                reason: 'type did not match',
+                consideredValue: null,
+                consideredType: 'null'
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
+---
+Correct Data :
+db.personal.insertOne({
+	name:"Laxmi Bhosale",
+	age:25,
+	married:false,
+	dob:ISODate("2010-10-10T12:30:00Z"),
+	weight:65.50,
+	kids:1,
+	hobbies:["music","sports","books"],
+	address:{
+	"street":"Pandharpur-Karad Road",
+	"city":"Pandharpur",
+	"pin":413304
+}
+	
+})
+---
+MongoDB Update & Replace Documents:
+updateOne()
+updateMany()
+---
+db.collecttion_name.updateOne(
+ {field:"Value"},  //filter
+ {$set:{updated_filed:"new_value"}} //update
+)
+---
+db.students.updateOne(
+{name:"Akshay Kumar"},
+{$set:{age:15,name:"Anil Kumar"}}
+)
+---
+updating with id:
+db.students.updateOne(
+{_id: ObjectId('6809dffe1c61db3b65b5f89a')},
+{$set:{age:100,name:"Ashok Kumar"}}
+)
+---
+MongoDB update operators:
+$set
+$unset : removes the field from the document
+$renmae : renames the field
+$inc: increments the field value
+$mul: multiplies the field value
+$currentDate: sets the field value to the current date
+---
+MongoDB update array operators
+{skills:["HTML","PYTHON","JavaScript"]}
+$push: adds an element to an array
+$pop: removes the first or last element of an array
+$pull: removes all elements from an array that match the query
+$addToSet: Adds distict elements to an array
+---
+Session 8 <-
+---
+
